@@ -1,12 +1,15 @@
+
 {
-  "engines": {
-  "node": "24.19.0"
-},
   "name": "airbnb",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Airbnb Full Stack Web Application",
+  "main": "app.js",
+  "engines": {
+    "node": "24.19.0"
+  },
   "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -31,5 +34,8 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^9.2.1",
     "streamifier": "^0.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
