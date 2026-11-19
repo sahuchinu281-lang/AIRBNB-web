@@ -1,0 +1,154 @@
+<!-- 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/listings">
+            <i class="fa-solid fa-compass me-2"></i>airbnbDTS
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/listings">Listings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/listings/new">Add Listing</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav align-items-lg-center">
+                <% if (currentUser) { %>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <i class="fa-solid fa-user me-1"></i>
+                            <%= currentUser.username %>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form action="/logout" method="POST">
+                            <button class="btn btn-outline-light btn-sm"
+                                    type="submit">Logout</button>
+                        </form>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-light btn-sm ms-lg-2" href="/signup">Sign up</a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav> -->
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold" >
+            <i class="fa-solid fa-compass me-2"></i>airbnbDTS
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navigation Links -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <ul class="navbar-nav me-auto">
+
+                
+
+                <!-- Listings -->
+                <li class="nav-item">
+                    <a
+                        class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath.startsWith('/listings') && currentPath !== '/listings/new') ? 'active' : '' %>"
+                        href="/listings">
+                        Listings
+                    </a>
+                </li>
+<!-- Add Listing -->
+                <li class="nav-item">
+                    <a
+                        class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath === '/listings/new') ? 'active' : '' %>"
+                        href="/listings/new">
+                        Add Listing
+                    </a>
+                </li>
+
+            </ul>
+
+            <!-- Authentication Links -->
+            <ul class="navbar-nav align-items-lg-center">
+
+                <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+
+                    <!-- Logged-in User -->
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <i class="fa-solid fa-user me-1"></i>
+                            <%= currentUser.username %>
+                        </span>
+                    </li>
+
+                    <!-- Logout -->
+                     <b>
+                    <li class="nav-item">
+                        <form action="/logout" method="POST" class="d-inline">
+                            <button
+                                class="btn btn-outline-light btn-sm"
+                                type="submit">
+                                <i class="fa-solid fa-right-from-bracket me-1"></i>
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                    </b>
+
+                <% } else { %>
+
+                    <!-- Login -->
+                     <b>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            Login
+                        </a>
+                    </li>
+                    </b>
+
+                    <!-- Signup -->
+                     <b>
+                    <li class="nav-item">
+                        <a class="btn btn-light btn-sm ms-lg-2" href="/signup">
+                            Sign up
+                        </a>
+                    </li>
+                    </b>
+
+                <% } %>
+
+            </ul>
+        </div>
+    </div>
+</nav>

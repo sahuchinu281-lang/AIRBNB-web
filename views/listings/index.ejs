@@ -1,0 +1,710 @@
+
+<% layout("layouts/boilerplate") -%>
+
+<%
+const listings = (
+    typeof allListings !== "undefined" &&
+    Array.isArray(allListings)
+) ? allListings : [];
+
+const categories = [
+    { name: "Trending", value: "all", icon: "fa-fire" },
+    { name: "Rooms", value: "Rooms", icon: "fa-bed" },
+    { name: "Iconic Cities", value: "Iconic Cities", icon: "fa-city" },
+    { name: "Mountains", value: "Mountains", icon: "fa-mountain-sun" },
+    { name: "Castles", value: "Castles", icon: "fa-chess-rook" },
+    { name: "Amazing Pools", value: "Amazing Pools", icon: "fa-person-swimming" },
+    { name: "Farm Houses", value: "Farm Houses", icon: "fa-tractor" },
+    { name: "Cabins", value: "Cabins", icon: "fa-house" },
+    { name: "Beachfront", value: "Beachfront", icon: "fa-umbrella-beach" },
+    { name: "Tiny Homes", value: "Tiny Homes", icon: "fa-house-chimney" },
+    { name: "Camping", value: "Camping", icon: "fa-campground" },
+    { name: "Countryside", value: "Countryside", icon: "fa-wheat-awn" },
+    { name: "Treehouses", value: "Treehouses", icon: "fa-tree" },
+    { name: "Lakefront", value: "Lakefront", icon: "fa-water" },
+    { name: "Luxury Stays", value: "Luxury Stays", icon: "fa-gem" },
+    { name: "Desert Homes", value: "Desert Homes", icon: "fa-sun" },
+    { name: "Ski Resorts", value: "Ski Resorts", icon: "fa-person-skiing" },
+    { name: "Historic Homes", value: "Historic Homes", icon: "fa-landmark" }
+];
+%>
+
+<!-- HERO -->
+<section class="stay-hero">
+    <div class="stay-hero-content">
+        <span class="stay-eyebrow">
+            <i class="fa-solid fa-compass"></i>
+            YOUR NEXT ADVENTURE STARTS HERE
+        </span>
+
+        <h1>Find your place<br>in the world.</h1>
+
+        <p>
+            Extraordinary places, beautiful destinations,
+            and memories waiting to happen.
+        </p>
+
+        <form id="listingSearch" class="stay-search">
+            <div class="stay-search-field">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <label for="searchDestination">Where to?</label>
+                    <input id="searchDestination" type="search"
+                           placeholder="Search destination or stay">
+                </div>
+            </div>
+
+            <div class="stay-search-field">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+                <div>
+                    <label for="searchBudget">Maximum budget</label>
+                    <input id="searchBudget" type="number"
+                           min="0" placeholder="Any price">
+                </div>
+            </div>
+
+            <button type="submit" class="stay-search-submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Search
+            </button>
+        </form>
+    </div>
+
+    <div class="stay-hero-art" aria-hidden="true">
+        <div class="hero-orbit hero-orbit-one"></div>
+        <div class="hero-orbit hero-orbit-two"></div>
+        <div class="hero-art-card">
+            <i class="fa-solid fa-mountain-sun"></i>
+            <span>Somewhere beautiful</span>
+            <small>Your next chapter awaits</small>
+        </div>
+        <div class="hero-floating-icon hero-floating-one">
+            <i class="fa-solid fa-heart"></i>
+        </div>
+        <div class="hero-floating-icon hero-floating-two">
+            <i class="fa-solid fa-location-dot"></i>
+        </div>
+    </div>
+</section>
+
+<!-- PAGE HEADING -->
+<section class="stay-section-heading">
+    <div>
+        <span class="stay-section-kicker">EXPLORE THE COLLECTION</span>
+        <h2>Discover your next stay</h2>
+        <p>Find the perfect place for your kind of getaway.</p>
+    </div>
+
+    <a href="/listings/new" class="stay-add-button">
+        <i class="fa-solid fa-plus"></i>
+        Add listing
+    </a>
+</section>
+
+<!-- ALL 18 CATEGORIES -->
+<nav class="stay-category-toolbar" aria-label="Stay categories">
+    <div class="stay-category-bar" id="categoryBar">
+        <% categories.forEach((category, index) => { %>
+            <button type="button"
+                    class="stay-category <%= index === 0 ? 'active' : '' %>"
+                    data-category="<%= category.value %>">
+                <i class="fa-solid <%= category.icon %>"></i>
+                <span><%= category.name %></span>
+            </button>
+        <% }) %>
+    </div>
+
+    <button type="button" class="stay-filter-button"
+            data-bs-toggle="modal" data-bs-target="#filterModal">
+        <i class="fa-solid fa-sliders"></i>
+        Filters
+    </button>
+</nav>
+
+<!-- FILTER MODAL -->
+<div class="modal fade" id="filterModal" tabindex="-1"
+     aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content stay-modal">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">
+                    <i class="fa-solid fa-sliders me-2"></i>
+                    Find your perfect stay
+                </h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="stay-filter-section">
+                    <h6>Price per night</h6>
+                    <p>Set a budget that works for you.</p>
+
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label for="minPrice" class="form-label">
+                                Minimum price (₹)
+                            </label>
+                            <input type="number" id="minPrice" min="0"
+                                   class="form-control" placeholder="No minimum">
+                        </div>
+                        <div class="col-6">
+                            <label for="maxPrice" class="form-label">
+                                Maximum price (₹)
+                            </label>
+                            <input type="number" id="maxPrice" min="0"
+                                   class="form-control" placeholder="No maximum">
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="stay-filter-section">
+                    <h6>Accommodation type</h6>
+                    <p>Choose the style of stay you want.</p>
+
+                    <select id="filterCategory" class="form-select">
+                        <% categories.forEach((category) => { %>
+                            <option value="<%= category.value %>">
+                                <%= category.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <p id="filterError" class="text-danger small mt-3 mb-0"
+                   role="alert"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="clearFilters"
+                        class="btn btn-light">Clear all</button>
+                <button type="button" id="applyFilters"
+                        class="btn btn-dark">Show stays</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LISTINGS RESULTS -->
+<div class="stay-results-toolbar">
+    <p id="filterResults" aria-live="polite">
+        Explore available stays
+    </p>
+
+    <div class="stay-sort-control">
+        <label for="sortListings">
+            <i class="fa-solid fa-arrow-down-wide-short"></i>
+            Sort
+        </label>
+        <select id="sortListings">
+            <option value="recommended">Recommended</option>
+            <option value="price-low">Price: low to high</option>
+            <option value="price-high">Price: high to low</option>
+            <option value="name">Name: A to Z</option>
+        </select>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4"
+     id="listingsGrid">
+
+    <% listings.forEach((listing) => { %>
+        <div class="col stay-listing-column"
+             data-category="<%= listing.category || '' %>"
+             data-price="<%= Number(listing.price || 0) %>"
+             data-title="<%= listing.title || '' %>"
+             data-location="<%= listing.location || '' %>"
+             data-country="<%= listing.country || '' %>">
+
+            <article class="stay-listing-card h-100">
+                <div class="stay-listing-image-wrap">
+                    <a href="/listings/<%= listing._id %>"
+                       class="stay-listing-image-link">
+                        <img
+                            src="<%= listing.image?.url || 'https://placehold.co/600x450?text=Beautiful+Stay' %>"
+                            alt="<%= listing.title || 'Listing image' %>"
+                            class="stay-listing-image"
+                            loading="lazy"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x450?text=Image+Unavailable';">
+                    </a>
+
+                    <span class="stay-image-badge">
+                        <i class="fa-solid fa-sparkles"></i>
+                        Discover
+                    </span>
+
+                    <button type="button"
+                            class="stay-favorite"
+                            aria-label="Add to favorites"
+                            aria-pressed="false">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                </div>
+
+                <div class="stay-listing-body">
+                    <div class="stay-listing-location">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>
+                            <%= listing.location || "Location unavailable" %>
+                            <% if (listing.country) { %>
+                                , <%= listing.country %>
+                            <% } %>
+                        </span>
+                    </div>
+
+                    <h3 class="stay-listing-title">
+                        <a href="/listings/<%= listing._id %>">
+                            <%= listing.title || "Untitled Listing" %>
+                        </a>
+                    </h3>
+
+                    <p class="stay-listing-category">
+                        <%= listing.category || "Unique stay" %>
+                    </p>
+
+                    <div class="stay-listing-footer">
+                        <p class="stay-listing-price">
+                            <strong>₹<%= Number(listing.price || 0).toLocaleString("en-IN") %></strong>
+                            <span>/ night</span>
+                        </p>
+
+                        <a href="/listings/<%= listing._id %>"
+                           class="stay-view-link"
+                           aria-label="View listing details">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    <% }) %>
+</div>
+
+<!-- NO RESULTS -->
+<div id="emptyState" class="stay-empty-state d-none">
+    <div class="stay-empty-icon">
+        <i class="fa-solid fa-house-circle-check"></i>
+    </div>
+    <h3>No stays found</h3>
+    <p>Try another destination or change your filters.</p>
+    <button type="button" id="resetEmptyFilters" class="btn btn-dark">
+        Reset search
+    </button>
+</div>
+
+<% if (listings.length === 0) { %>
+    <div class="stay-empty-state stay-initial-empty">
+        <div class="stay-empty-icon">
+            <i class="fa-solid fa-house"></i>
+        </div>
+        <h3>Your next adventure starts here</h3>
+        <p>There are no listings yet. Add your first beautiful stay.</p>
+        <a href="/listings/new" class="btn btn-dark">
+            <i class="fa-solid fa-plus me-2"></i>
+            Create first listing
+        </a>
+    </div>
+<% } %>
+
+<!-- POPULAR DESTINATIONS -->
+<section class="stay-extra-section" id="destinations">
+    <div class="stay-section-heading">
+        <div>
+            <span class="stay-section-kicker">PLACES TO FALL IN LOVE WITH</span>
+            <h2>Popular destinations</h2>
+            <p>Start with a place you've always wanted to explore.</p>
+        </div>
+        <a href="#listingsGrid" class="stay-text-link">Explore stays
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="stay-destination-grid">
+        <button type="button" class="stay-destination-card"
+                data-destination="Goa">
+            <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=700&q=80"
+                 alt="Goa coastline" loading="lazy">
+            <span><strong>Goa</strong><small>Beaches and sunsets</small></span>
+        </button>
+
+        <button type="button" class="stay-destination-card"
+                data-destination="Manali">
+            <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=700&q=80"
+                 alt="Manali mountains" loading="lazy">
+            <span><strong>Manali</strong><small>Mountain escapes</small></span>
+        </button>
+
+        <button type="button" class="stay-destination-card"
+                data-destination="Jaipur">
+            <img src="https://images.unsplash.com/photo-1599661046827-dacff0c0f09a?auto=format&fit=crop&w=700&q=80"
+                 alt="Jaipur heritage architecture" loading="lazy">
+            <span><strong>Jaipur</strong><small>Culture and heritage</small></span>
+        </button>
+
+        <button type="button" class="stay-destination-card"
+                data-destination="Mumbai">
+            <img src="https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=700&q=80"
+                 alt="Mumbai city" loading="lazy">
+            <span><strong>Mumbai</strong><small>City adventures</small></span>
+        </button>
+    </div>
+</section>
+
+<!-- FEATURED BANNER -->
+<section class="stay-getaway-banner">
+    <div class="stay-getaway-content">
+        <span>MAKE TIME FOR YOURSELF</span>
+        <h2>Some places stay<br>with you forever.</h2>
+        <p>Find a new view, a slower morning, and a reason to explore.</p>
+        <a href="#listingsGrid" class="stay-getaway-button">
+            Find your getaway <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+    <div class="stay-getaway-art" aria-hidden="true">
+        <i class="fa-solid fa-mountain-sun"></i>
+    </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="stay-extra-section">
+    <div class="stay-section-heading">
+        <div>
+            <span class="stay-section-kicker">MADE FOR YOUR JOURNEY</span>
+            <h2>Travel your way</h2>
+            <p>Everything you need to find a stay that feels right.</p>
+        </div>
+    </div>
+
+    <div class="stay-benefits-grid">
+        <article class="stay-benefit-card">
+            <div><i class="fa-solid fa-house"></i></div>
+            <h3>Unique places</h3>
+            <p>Explore different kinds of accommodation for every kind of trip.</p>
+        </article>
+
+        <article class="stay-benefit-card">
+            <div><i class="fa-solid fa-magnifying-glass"></i></div>
+            <h3>Easy discovery</h3>
+            <p>Find stays by destination, category, and the price you prefer.</p>
+        </article>
+
+        <article class="stay-benefit-card">
+            <div><i class="fa-solid fa-wallet"></i></div>
+            <h3>Budget your way</h3>
+            <p>Compare nightly prices and narrow your options with filters.</p>
+        </article>
+    </div>
+</section>
+
+<!-- TRAVEL INSPIRATION -->
+<section class="stay-extra-section" id="inspiration">
+    <div class="stay-section-heading">
+        <div>
+            <span class="stay-section-kicker">FOLLOW YOUR CURIOSITY</span>
+            <h2>Choose your kind of escape</h2>
+            <p>Where will your next story take you?</p>
+        </div>
+    </div>
+
+    <div class="stay-inspiration-grid">
+        <button type="button" class="stay-inspiration-card"
+                data-inspiration="Mountains">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80"
+                 alt="Mountain retreat" loading="lazy">
+            <span><small>FIND YOUR PEACE</small><strong>Mountain retreats</strong>
+                <i class="fa-solid fa-arrow-right"></i></span>
+        </button>
+
+        <button type="button" class="stay-inspiration-card"
+                data-inspiration="Amazing Pools">
+            <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=900&q=80"
+                 alt="Resort pool" loading="lazy">
+            <span><small>TAKE A BREAK</small><strong>Poolside escapes</strong>
+                <i class="fa-solid fa-arrow-right"></i></span>
+        </button>
+
+        <button type="button" class="stay-inspiration-card"
+                data-inspiration="Iconic Cities">
+            <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=900&q=80"
+                 alt="City skyline" loading="lazy">
+            <span><small>SEE SOMETHING NEW</small><strong>City adventures</strong>
+                <i class="fa-solid fa-arrow-right"></i></span>
+        </button>
+    </div>
+</section>
+
+<!-- NEWSLETTER UI -->
+<section class="stay-newsletter">
+    <div class="stay-newsletter-icon">
+        <i class="fa-regular fa-paper-plane"></i>
+    </div>
+    <div class="stay-newsletter-copy">
+        <span class="stay-section-kicker">A LITTLE TRAVEL IN YOUR INBOX</span>
+        <h2>Good places. Great stories.</h2>
+        <p>Get inspired with destination ideas and travel tips.</p>
+    </div>
+    <form id="newsletterForm" class="stay-newsletter-form">
+        <label for="newsletterEmail" class="visually-hidden">Email address</label>
+        <input type="email" id="newsletterEmail"
+               placeholder="Enter your email address" required>
+        <button type="submit">Sign me up
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <p id="newsletterMessage" aria-live="polite"></p>
+    </form>
+</section>
+
+<!-- FOOTER -->
+<footer class="stay-footer">
+    <div class="stay-footer-main">
+        <div class="stay-footer-brand">
+            <a href="/listings" class="stay-footer-logo">
+                <i class="fa-solid fa-compass"></i> stay<span>scape.</span>
+            </a>
+            <p>Your next adventure is closer than you think.</p>
+            <div class="stay-socials">
+                <a href="https://www.instagram.com/" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="https://www.pinterest.com/" aria-label="Pinterest">
+                    <i class="fa-brands fa-pinterest-p"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="stay-footer-column">
+            <h4>Explore</h4>
+            <a href="/listings">All listings</a>
+            <a href="/listings/new">Add a listing</a>
+        </div>
+
+        <div class="stay-footer-column">
+            <h4>Discover</h4>
+            <a href="#categoryBar">Stay categories</a>
+            <a href="#destinations">Destinations</a>
+        </div>
+
+        <div class="stay-footer-column">
+            <h4>Get inspired</h4>
+            <a href="#inspiration">Travel ideas</a>
+            <a href="#listingsGrid">Find your stay</a>
+        </div>
+    </div>
+
+    <div class="stay-footer-bottom">
+        <p>© <%= new Date().getFullYear() %> Stayscape. All rights reserved.</p>
+        <a href="/listings">Made for your next adventure
+            <i class="fa-solid fa-heart"></i>
+        </a>
+    </div>
+</footer>
+
+<!-- ALL PAGE JAVASCRIPT IS KEPT IN THIS FILE -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const grid = document.getElementById("listingsGrid");
+    const cards = Array.from(document.querySelectorAll(".stay-listing-column"));
+    const categoryButtons = document.querySelectorAll(".stay-category");
+    const categorySelect = document.getElementById("filterCategory");
+    const destinationInput = document.getElementById("searchDestination");
+    const budgetInput = document.getElementById("searchBudget");
+    const minInput = document.getElementById("minPrice");
+    const maxInput = document.getElementById("maxPrice");
+    const sortSelect = document.getElementById("sortListings");
+    const results = document.getElementById("filterResults");
+    const emptyState = document.getElementById("emptyState");
+    const filterError = document.getElementById("filterError");
+
+    let activeCategory = "all";
+    let searchText = "";
+    let searchBudget = Infinity;
+
+    function updateCategoryButtons() {
+        categoryButtons.forEach(function (button) {
+            button.classList.toggle(
+                "active",
+                button.dataset.category === activeCategory
+            );
+        });
+    }
+
+    function applyFilters() {
+        const min = minInput.value === "" ? 0 : Number(minInput.value);
+        const max = maxInput.value === "" ? Infinity : Number(maxInput.value);
+
+        if (!Number.isFinite(min) || min < 0 ||
+            (max !== Infinity && (!Number.isFinite(max) || max < 0)) ||
+            min > max) {
+            filterError.textContent = "Enter a valid price range.";
+            return false;
+        }
+
+        filterError.textContent = "";
+        const visibleCards = [];
+
+        cards.forEach(function (card) {
+            const category = (card.dataset.category || "").trim().toLowerCase();
+            const title = (card.dataset.title || "").toLowerCase();
+            const location = (card.dataset.location || "").toLowerCase();
+            const country = (card.dataset.country || "").toLowerCase();
+            const price = Number(card.dataset.price);
+
+            const categoryMatch =
+                activeCategory === "all" ||
+                category === activeCategory.toLowerCase();
+
+            const destinationMatch =
+                !searchText || title.includes(searchText) ||
+                location.includes(searchText) || country.includes(searchText);
+
+            const priceMatch =
+                Number.isFinite(price) &&
+                price >= min && price <= max && price <= searchBudget;
+
+            const visible = categoryMatch && destinationMatch && priceMatch;
+            card.classList.toggle("d-none", !visible);
+
+            if (visible) visibleCards.push(card);
+        });
+
+        visibleCards.sort(function (a, b) {
+            const priceA = Number(a.dataset.price);
+            const priceB = Number(b.dataset.price);
+            const titleA = (a.dataset.title || "").toLowerCase();
+            const titleB = (b.dataset.title || "").toLowerCase();
+
+            if (sortSelect.value === "price-low") return priceA - priceB;
+            if (sortSelect.value === "price-high") return priceB - priceA;
+            if (sortSelect.value === "name") return titleA.localeCompare(titleB);
+
+            return cards.indexOf(a) - cards.indexOf(b);
+        });
+
+        visibleCards.forEach(card => grid.appendChild(card));
+
+        results.textContent =
+            "Showing " + visibleCards.length + " of " + cards.length + " stays";
+
+        emptyState.classList.toggle(
+            "d-none",
+            visibleCards.length !== 0 || cards.length === 0
+        );
+
+        return true;
+    }
+
+    categoryButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            activeCategory = button.dataset.category;
+            categorySelect.value = activeCategory;
+            updateCategoryButtons();
+            applyFilters();
+            document.getElementById("listingsGrid").scrollIntoView({
+                behavior: "smooth", block: "start"
+            });
+        });
+    });
+
+    categorySelect.addEventListener("change", function () {
+        activeCategory = categorySelect.value;
+        updateCategoryButtons();
+    });
+
+    document.getElementById("listingSearch").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const budget = budgetInput.value;
+
+        if (budget !== "" &&
+            (!Number.isFinite(Number(budget)) || Number(budget) < 0)) {
+            results.textContent = "Please enter a valid maximum budget.";
+            return;
+        }
+
+        searchText = destinationInput.value.trim().toLowerCase();
+        searchBudget = budget === "" ? Infinity : Number(budget);
+        applyFilters();
+    });
+
+    sortSelect.addEventListener("change", applyFilters);
+
+    document.getElementById("applyFilters").addEventListener("click", function () {
+        if (applyFilters() && window.bootstrap) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById("filterModal"));
+            if (modal) modal.hide();
+        }
+    });
+
+    function clearFilters() {
+        minInput.value = "";
+        maxInput.value = "";
+        budgetInput.value = "";
+        destinationInput.value = "";
+        searchText = "";
+        searchBudget = Infinity;
+        activeCategory = "all";
+        categorySelect.value = "all";
+        sortSelect.value = "recommended";
+        updateCategoryButtons();
+        applyFilters();
+    }
+
+    document.getElementById("clearFilters").addEventListener("click", clearFilters);
+    document.getElementById("resetEmptyFilters").addEventListener("click", clearFilters);
+
+    document.querySelectorAll(".stay-favorite").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const active = button.getAttribute("aria-pressed") === "true";
+            button.setAttribute("aria-pressed", String(!active));
+            button.classList.toggle("is-favorite", !active);
+            button.innerHTML = !active
+                ? '<i class="fa-solid fa-heart"></i>'
+                : '<i class="fa-regular fa-heart"></i>';
+            button.setAttribute("aria-label",
+                !active ? "Remove from favorites" : "Add to favorites");
+        });
+    });
+
+    function searchDestination(destination) {
+        destinationInput.value = destination;
+        searchText = destination.toLowerCase();
+        searchBudget = Infinity;
+        budgetInput.value = "";
+        applyFilters();
+        document.getElementById("listingsGrid").scrollIntoView({
+            behavior: "smooth", block: "start"
+        });
+    }
+
+    document.querySelectorAll(".stay-destination-card").forEach(function (button) {
+        button.addEventListener("click", function () {
+            searchDestination(button.dataset.destination);
+        });
+    });
+
+    document.querySelectorAll(".stay-inspiration-card").forEach(function (button) {
+        button.addEventListener("click", function () {
+            activeCategory = button.dataset.inspiration;
+            categorySelect.value = activeCategory;
+            updateCategoryButtons();
+            applyFilters();
+            document.getElementById("listingsGrid").scrollIntoView({
+                behavior: "smooth", block: "start"
+            });
+        });
+    });
+
+    document.getElementById("newsletterForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        document.getElementById("newsletterMessage").textContent =
+            "Thanks for your interest! Newsletter signup needs a backend connection.";
+    });
+
+    applyFilters();
+});
+</script>

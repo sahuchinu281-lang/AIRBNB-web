@@ -1,0 +1,176 @@
+
+<% layout("layouts/boilerplate") -%>
+
+<style>
+    .edit-review-container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 30px;
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    .edit-review-title {
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .edit-review-subtitle {
+        color: #6c757d;
+        margin-bottom: 25px;
+    }
+
+    .edit-review-container .form-label {
+        font-weight: 600;
+    }
+
+    .edit-review-container .form-control,
+    .edit-review-container .form-select {
+        padding: 11px 12px;
+        border-radius: 8px;
+    }
+
+    .edit-review-container textarea {
+        resize: vertical;
+    }
+
+    .edit-review-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 25px;
+    }
+
+    @media (max-width: 576px) {
+        .edit-review-container {
+            margin: 20px 10px;
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="edit-review-container">
+
+        <h2 class="edit-review-title">
+            <i class="fa-solid fa-pen-to-square me-2"></i>
+            Edit Your Review
+        </h2>
+
+        <p class="edit-review-subtitle">
+            Update your rating and share your experience.
+        </p>
+
+        <form
+            action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=PUT"
+            method="POST"
+            class="needs-validation"
+            novalidate
+        >
+            <!-- Rating -->
+            <div class="mb-3">
+                <label for="rating" class="form-label">
+                    Rating
+                </label>
+
+                <select
+                    id="rating"
+                    name="review[rating]"
+                    class="form-select"
+                    required
+                >
+                    <option value="">Choose a rating</option>
+
+                    <% [5, 4, 3, 2, 1].forEach(value => { %>
+                        <option
+                            value="<%= value %>"
+                            <%= Number(review.rating) === value ? "selected" : "" %>
+                        >
+                            <%= value %> / 5
+                            <%= value === 5 ? " - Excellent" :
+                                value === 4 ? " - Very Good" :
+                                value === 3 ? " - Good" :
+                                value === 2 ? " - Fair" : " - Poor" %>
+                        </option>
+                    <% }) %>
+                </select>
+
+                <div class="invalid-feedback">
+                    Please select a rating.
+                </div>
+            </div>
+
+            <!-- Comment -->
+            <div class="mb-3">
+                <label for="comment" class="form-label">
+                    Your Comment
+                </label>
+
+                <textarea
+                    id="comment"
+                    name="review[comment]"
+                    class="form-control"
+                    rows="5"
+                    minlength="1"
+                    maxlength="1000"
+                    placeholder="Share your experience..."
+                    required
+                ><%= review.comment %></textarea>
+
+                <div class="invalid-feedback">
+                    Please enter your review.
+                </div>
+
+                <div class="form-text">
+                    <span id="character-count">0</span>/1000 characters
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="edit-review-actions">
+                <button type="submit" class="btn btn-dark">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+                    Save Changes
+                </button>
+
+                <a
+                    href="/listings/<%= listing._id %>"
+                    class="btn btn-outline-secondary"
+                >
+                    <i class="fa-solid fa-xmark me-2"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    (() => {
+        "use strict";
+
+        const form = document.querySelector(".needs-validation");
+        const comment = document.getElementById("comment");
+        const characterCount = document.getElementById("character-count");
+
+        function updateCharacterCount() {
+            characterCount.textContent = comment.value.length;
+        }
+
+        updateCharacterCount();
+        comment.addEventListener("input", updateCharacterCount);
+
+        form.addEventListener("submit", event => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add("was-validated");
+        });
+    })();
+</script>
+
+
